@@ -37,10 +37,10 @@ export default function Home() {
             Admin Dashboard
           </Link>
           <Link
-            href="/signup"
+            href="/auth/signin"
             className="rounded-full border border-solid border-blue-600 dark:border-blue-400 transition-colors flex items-center justify-center hover:bg-blue-50 dark:hover:bg-gray-700 font-medium text-blue-600 dark:text-blue-400 text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto"
           >
-            Create Account
+           Login Page
           </Link>
         </div>
       </main>
