@@ -14,7 +14,8 @@ import {
   FaMinusCircle,
   FaHistory,
   FaBars,
-  FaTimes
+  FaTimes,
+  FaHandHoldingUsd
 } from 'react-icons/fa';
 import Link from 'next/link';
 import Swal from 'sweetalert2';
@@ -32,6 +33,14 @@ const incomeCategories = [
   { id: 8, name: 'Lainnya' }
 ];
 
+// List of offering types (Jenis Dana)
+const offeringTypes = [
+  { id: 1, name: 'Pundi Merah' },
+  { id: 2, name: 'Pundi Hijau' },
+  { id: 3, name: 'G-1000 (Dana Sosial)' },
+  { id: 4, name: 'Persekutuan Rumah Tangga' }
+];
+
 export default function IncomeForm() {
   const router = useRouter();
   const pathname = usePathname();
@@ -40,6 +49,7 @@ export default function IncomeForm() {
   const [formData, setFormData] = useState({
     date: new Date().toISOString().split('T')[0],
     category: '',
+    offeringType: '', // New field for jenis dana
     amount: '',
     description: ''
   });
@@ -69,6 +79,7 @@ export default function IncomeForm() {
     const newErrors = {};
     if (!formData.date) newErrors.date = 'Tanggal wajib diisi';
     if (!formData.category) newErrors.category = 'Kategori wajib dipilih';
+    if (!formData.offeringType) newErrors.offeringType = 'Jenis dana wajib dipilih'; // New validation
     if (!formData.amount || formData.amount <= 0) newErrors.amount = 'Jumlah harus lebih dari 0';
 
     setErrors(newErrors);
@@ -86,6 +97,7 @@ export default function IncomeForm() {
         <div class="text-left">
           <p><strong>Tanggal:</strong> ${formData.date}</p>
           <p><strong>Kategori:</strong> ${formData.category}</p>
+          <p><strong>Jenis Dana:</strong> ${formData.offeringType}</p>
           <p><strong>Jumlah:</strong> Rp ${parseFloat(formData.amount).toLocaleString('id-ID')}</p>
           <p><strong>Keterangan:</strong> ${formData.description || '-'}</p>
         </div>
@@ -312,6 +324,41 @@ export default function IncomeForm() {
                   )}
                 </div>
 
+                {/* Offering Type Dropdown (New) */}
+                <div className="form-group">
+                  <label className="block text-gray-700 font-medium mb-2">
+                    <div className="flex items-center">
+                      <FaHandHoldingUsd className="text-blue-500 mr-2" />
+                      Jenis Dana
+                    </div>
+                  </label>
+                  <div className="relative">
+                    <select
+                      name="offeringType"
+                      value={formData.offeringType}
+                      onChange={handleChange}
+                      className={`w-full p-3 border rounded-lg appearance-none focus:ring focus:ring-blue-300 focus:border-blue-500 outline-none transition text-gray-800 bg-white ${
+                        errors.offeringType ? 'border-red-500' : 'border-gray-300'
+                      }`}
+                    >
+                      <option value="">-- Pilih Jenis Dana --</option>
+                      {offeringTypes.map((type) => (
+                        <option key={type.id} value={type.name}>
+                          {type.name}
+                        </option>
+                      ))}
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-700">
+                      <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd"></path>
+                      </svg>
+                    </div>
+                  </div>
+                  {errors.offeringType && (
+                    <p className="text-red-500 text-sm mt-1">{errors.offeringType}</p>
+                  )}
+                </div>
+
                 {/* Amount Input */}
                 <div className="form-group">
                   <label className="block text-gray-700 font-medium mb-2">
@@ -390,7 +437,7 @@ export default function IncomeForm() {
                 <h3 className="text-sm font-medium text-blue-800">Tips pencatatan keuangan</h3>
                 <div className="mt-2 text-sm text-blue-700 space-y-1">
                   <p>• Pastikan tanggal transaksi sudah benar</p>
-                  <p>• Pilih kategori yang paling sesuai</p>
+                  <p>• Pilih kategori dan jenis dana yang sesuai</p>
                   <p>• Berikan keterangan yang jelas untuk memudahkan pencarian</p>
                 </div>
               </div>
