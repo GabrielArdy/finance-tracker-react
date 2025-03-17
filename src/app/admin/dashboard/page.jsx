@@ -48,24 +48,61 @@ const Dashboard = () => {
   const [expenseData, setExpenseData] = useState([]);
   const [transactions, setTransactions] = useState([]);
   
+  // New state variables for different offering types
+  const [pundiMerahData, setPundiMerahData] = useState([]);
+  const [pundiHijauData, setPundiHijauData] = useState([]);
+  const [g1000Data, setG1000Data] = useState([]);
+  const [rumahTanggaData, setRumahTanggaData] = useState([]);
+  
+  // New state variables for different expense types
+  const [operationalExpenses, setOperationalExpenses] = useState([]);
+  const [programExpenses, setProgramExpenses] = useState([]);
+  const [socialExpenses, setSocialExpenses] = useState([]);
+  
   // Fetch data based on selected period
   useEffect(() => {
     // Mock data for example
     // In real implementation, replace with API calls
-    const mockIncomeData = Array.from({length: 30}, () => Math.floor(Math.random() * 500000) + 100000);
-    const mockExpenseData = Array.from({length: 30}, () => Math.floor(Math.random() * 400000) + 50000);
+    const mockPundiMerahData = Array.from({length: 30}, () => Math.floor(Math.random() * 200000) + 50000);
+    const mockPundiHijauData = Array.from({length: 30}, () => Math.floor(Math.random() * 150000) + 30000);
+    const mockG1000Data = Array.from({length: 30}, () => Math.floor(Math.random() * 100000) + 20000);
+    const mockRumahTanggaData = Array.from({length: 30}, () => Math.floor(Math.random() * 150000) + 40000);
+    
+    // Calculate total income data as sum of all offering types
+    const totalIncomeData = Array.from({length: 30}, (_, i) => 
+      mockPundiMerahData[i] + mockPundiHijauData[i] + mockG1000Data[i] + mockRumahTanggaData[i]
+    );
+    
+    // Mock expense data by category
+    const mockOperationalExpenses = Array.from({length: 30}, () => Math.floor(Math.random() * 150000) + 30000);
+    const mockProgramExpenses = Array.from({length: 30}, () => Math.floor(Math.random() * 130000) + 20000);
+    const mockSocialExpenses = Array.from({length: 30}, () => Math.floor(Math.random() * 120000) + 10000);
+    
+    // Calculate total expense data as sum of all expense types
+    const totalExpenseData = Array.from({length: 30}, (_, i) => 
+      mockOperationalExpenses[i] + mockProgramExpenses[i] + mockSocialExpenses[i]
+    );
     
     const mockTransactions = [
-      { id: 1, type: 'income', category: 'Persembahan', amount: 2500000, date: '2023-03-05', description: 'Persembahan minggu pertama' },
-      { id: 2, type: 'expense', category: 'Utilitas', amount: 750000, date: '2023-03-07', description: 'Pembayaran listrik' },
-      { id: 3, type: 'income', category: 'Perpuluhan', amount: 1750000, date: '2023-03-12', description: 'Perpuluhan jemaat' },
-      { id: 4, type: 'expense', category: 'Kegiatan', amount: 1200000, date: '2023-03-15', description: 'Kegiatan remaja' },
-      { id: 5, type: 'income', category: 'Donasi', amount: 5000000, date: '2023-03-20', description: 'Donasi pembangunan' },
-      { id: 6, type: 'expense', category: 'Gaji', amount: 3500000, date: '2023-03-25', description: 'Gaji staf gereja' },
+      { id: 1, type: 'income', category: 'Persembahan', source: 'Pundi Merah', amount: 2500000, date: '2023-03-05', description: 'Persembahan minggu pertama' },
+      { id: 2, type: 'expense', category: 'Utilitas', source: 'Operasional', amount: 750000, date: '2023-03-07', description: 'Pembayaran listrik' },
+      { id: 3, type: 'income', category: 'Perpuluhan', source: 'Pundi Hijau', amount: 1750000, date: '2023-03-12', description: 'Perpuluhan jemaat' },
+      { id: 4, type: 'expense', category: 'Kegiatan', source: 'Program', amount: 1200000, date: '2023-03-15', description: 'Kegiatan remaja' },
+      { id: 5, type: 'income', category: 'Donasi', source: 'G-1000', amount: 5000000, date: '2023-03-20', description: 'Donasi pembangunan' },
+      { id: 6, type: 'expense', category: 'Gaji', source: 'Operasional', amount: 3500000, date: '2023-03-25', description: 'Gaji staf gereja' },
     ];
     
-    setIncomeData(mockIncomeData);
-    setExpenseData(mockExpenseData);
+    setPundiMerahData(mockPundiMerahData);
+    setPundiHijauData(mockPundiHijauData);
+    setG1000Data(mockG1000Data);
+    setRumahTanggaData(mockRumahTanggaData);
+    
+    setOperationalExpenses(mockOperationalExpenses);
+    setProgramExpenses(mockProgramExpenses);
+    setSocialExpenses(mockSocialExpenses);
+    
+    setIncomeData(totalIncomeData);
+    setExpenseData(totalExpenseData);
     setTransactions(mockTransactions);
   }, [selectedMonth, selectedYear]);
 
@@ -234,9 +271,11 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Summary Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-          <div className="bg-gradient-to-r from-blue-500 to-blue-600 p-6 rounded-lg shadow-md text-white">
+        {/* Summary Cards - Income */}
+        <h3 className="text-xl font-bold text-gray-700 mb-4">Ringkasan Pemasukan</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
+          {/* Grand Total Income Card */}
+          <div className="bg-gradient-to-r from-blue-500 to-blue-600 p-4 rounded-lg shadow-md text-white col-span-1 md:col-span-2">
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-blue-100">Total Pemasukan</p>
@@ -249,7 +288,73 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-          <div className="bg-gradient-to-r from-red-500 to-red-600 p-6 rounded-lg shadow-md text-white">
+          
+          {/* Pundi Merah Card */}
+          <div className="bg-gradient-to-r from-red-400 to-red-500 p-4 rounded-lg shadow-md text-white">
+            <div className="flex justify-between items-start">
+              <div>
+                <p className="text-red-100">Pundi Merah</p>
+                <h3 className="text-lg font-bold mt-1">
+                  {formatCurrency(pundiMerahData.reduce((a, b) => a + b, 0))}
+                </h3>
+              </div>
+              <div className="p-2 bg-red-400 bg-opacity-30 rounded-full">
+                <FaMoneyBillWave className="text-sm" />
+              </div>
+            </div>
+          </div>
+          
+          {/* Pundi Hijau Card */}
+          <div className="bg-gradient-to-r from-green-400 to-green-500 p-4 rounded-lg shadow-md text-white">
+            <div className="flex justify-between items-start">
+              <div>
+                <p className="text-green-100">Pundi Hijau</p>
+                <h3 className="text-lg font-bold mt-1">
+                  {formatCurrency(pundiHijauData.reduce((a, b) => a + b, 0))}
+                </h3>
+              </div>
+              <div className="p-2 bg-green-400 bg-opacity-30 rounded-full">
+                <FaMoneyBillWave className="text-sm" />
+              </div>
+            </div>
+          </div>
+          
+          {/* G-1000 Card */}
+          <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 p-4 rounded-lg shadow-md text-white">
+            <div className="flex justify-between items-start">
+              <div>
+                <p className="text-yellow-100">G-1000 (Dana Sosial)</p>
+                <h3 className="text-lg font-bold mt-1">
+                  {formatCurrency(g1000Data.reduce((a, b) => a + b, 0))}
+                </h3>
+              </div>
+              <div className="p-2 bg-yellow-400 bg-opacity-30 rounded-full">
+                <FaMoneyBillWave className="text-sm" />
+              </div>
+            </div>
+          </div>
+          
+          {/* Persekutuan Rumah Tangga Card */}
+          <div className="bg-gradient-to-r from-purple-400 to-purple-500 p-4 rounded-lg shadow-md text-white">
+            <div className="flex justify-between items-start">
+              <div>
+                <p className="text-purple-100">Persekutuan Rumah Tangga</p>
+                <h3 className="text-lg font-bold mt-1">
+                  {formatCurrency(rumahTanggaData.reduce((a, b) => a + b, 0))}
+                </h3>
+              </div>
+              <div className="p-2 bg-purple-400 bg-opacity-30 rounded-full">
+                <FaMoneyBillWave className="text-sm" />
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Summary Cards - Expense */}
+        <h3 className="text-xl font-bold text-gray-700 mb-4 mt-8">Ringkasan Pengeluaran</h3>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+          {/* Grand Total Expense Card */}
+          <div className="bg-gradient-to-r from-red-500 to-red-600 p-4 rounded-lg shadow-md text-white col-span-1 md:col-span-2">
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-red-100">Total Pengeluaran</p>
@@ -262,20 +367,52 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-          <div className="bg-gradient-to-r from-green-500 to-green-600 p-6 rounded-lg shadow-md text-white">
+          
+          {/* Operational Expenses Card */}
+          <div className="bg-gradient-to-r from-orange-400 to-orange-500 p-4 rounded-lg shadow-md text-white">
             <div className="flex justify-between items-start">
               <div>
-                <p className="text-green-100">Saldo</p>
-                <h3 className="text-2xl font-bold mt-1">
-                  {formatCurrency(
-                    incomeData.reduce((a, b) => a + b, 0) - 
-                    expenseData.reduce((a, b) => a + b, 0)
-                  )}
+                <p className="text-orange-100">Operasional</p>
+                <h3 className="text-lg font-bold mt-1">
+                  {formatCurrency(operationalExpenses.reduce((a, b) => a + b, 0))}
                 </h3>
               </div>
-              <div className="p-3 bg-green-400 bg-opacity-30 rounded-full">
-                <FaChartLine className="text-xl" />
+              <div className="p-2 bg-orange-400 bg-opacity-30 rounded-full">
+                <FaReceipt className="text-sm" />
               </div>
+            </div>
+          </div>
+          
+          {/* Program Expenses Card */}
+          <div className="bg-gradient-to-r from-indigo-400 to-indigo-500 p-4 rounded-lg shadow-md text-white">
+            <div className="flex justify-between items-start">
+              <div>
+                <p className="text-indigo-100">Program/Kegiatan</p>
+                <h3 className="text-lg font-bold mt-1">
+                  {formatCurrency(programExpenses.reduce((a, b) => a + b, 0))}
+                </h3>
+              </div>
+              <div className="p-2 bg-indigo-400 bg-opacity-30 rounded-full">
+                <FaReceipt className="text-sm" />
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Balance Card */}
+        <div className="bg-gradient-to-r from-green-500 to-green-600 p-6 rounded-lg shadow-md text-white mb-8">
+          <div className="flex justify-between items-start">
+            <div>
+              <p className="text-green-100">Saldo</p>
+              <h3 className="text-2xl font-bold mt-1">
+                {formatCurrency(
+                  incomeData.reduce((a, b) => a + b, 0) - 
+                  expenseData.reduce((a, b) => a + b, 0)
+                )}
+              </h3>
+            </div>
+            <div className="p-3 bg-green-400 bg-opacity-30 rounded-full">
+              <FaChartLine className="text-xl" />
             </div>
           </div>
         </div>
@@ -370,6 +507,7 @@ const Dashboard = () => {
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategori</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sumber Dana</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah</th>
                 </tr>
@@ -387,6 +525,9 @@ const Dashboard = () => {
                         }`}></span>
                         <span className="text-sm font-medium text-gray-800">{transaction.category}</span>
                       </div>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-800">
+                      {transaction.source}
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-800">
                       {transaction.description}
