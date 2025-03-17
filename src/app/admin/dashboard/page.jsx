@@ -59,6 +59,12 @@ const Dashboard = () => {
   const [programExpenses, setProgramExpenses] = useState([]);
   const [socialExpenses, setSocialExpenses] = useState([]);
   
+  // New state variables for expenses by offering source
+  const [pundiMerahExpenses, setPundiMerahExpenses] = useState([]);
+  const [pundiHijauExpenses, setPundiHijauExpenses] = useState([]);
+  const [g1000Expenses, setG1000Expenses] = useState([]);
+  const [rumahTanggaExpenses, setRumahTanggaExpenses] = useState([]);
+  
   // Fetch data based on selected period
   useEffect(() => {
     // Mock data for example
@@ -78,9 +84,15 @@ const Dashboard = () => {
     const mockProgramExpenses = Array.from({length: 30}, () => Math.floor(Math.random() * 130000) + 20000);
     const mockSocialExpenses = Array.from({length: 30}, () => Math.floor(Math.random() * 120000) + 10000);
     
+    // Mock expense data by offering source
+    const mockPundiMerahExpenses = Array.from({length: 30}, () => Math.floor(Math.random() * 120000) + 30000);
+    const mockPundiHijauExpenses = Array.from({length: 30}, () => Math.floor(Math.random() * 90000) + 20000);
+    const mockG1000Expenses = Array.from({length: 30}, () => Math.floor(Math.random() * 150000) + 10000);
+    const mockRumahTanggaExpenses = Array.from({length: 30}, () => Math.floor(Math.random() * 40000) + 10000);
+    
     // Calculate total expense data as sum of all expense types
     const totalExpenseData = Array.from({length: 30}, (_, i) => 
-      mockOperationalExpenses[i] + mockProgramExpenses[i] + mockSocialExpenses[i]
+      mockPundiMerahExpenses[i] + mockPundiHijauExpenses[i] + mockG1000Expenses[i] + mockRumahTanggaExpenses[i]
     );
     
     const mockTransactions = [
@@ -100,6 +112,11 @@ const Dashboard = () => {
     setOperationalExpenses(mockOperationalExpenses);
     setProgramExpenses(mockProgramExpenses);
     setSocialExpenses(mockSocialExpenses);
+    
+    setPundiMerahExpenses(mockPundiMerahExpenses);
+    setPundiHijauExpenses(mockPundiHijauExpenses);
+    setG1000Expenses(mockG1000Expenses);
+    setRumahTanggaExpenses(mockRumahTanggaExpenses);
     
     setIncomeData(totalIncomeData);
     setExpenseData(totalExpenseData);
@@ -352,7 +369,7 @@ const Dashboard = () => {
         
         {/* Summary Cards - Expense */}
         <h3 className="text-xl font-bold text-gray-700 mb-4 mt-8">Ringkasan Pengeluaran</h3>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
           {/* Grand Total Expense Card */}
           <div className="bg-gradient-to-r from-red-500 to-red-600 p-4 rounded-lg shadow-md text-white col-span-1 md:col-span-2">
             <div className="flex justify-between items-start">
@@ -368,31 +385,61 @@ const Dashboard = () => {
             </div>
           </div>
           
-          {/* Operational Expenses Card */}
-          <div className="bg-gradient-to-r from-orange-400 to-orange-500 p-4 rounded-lg shadow-md text-white">
+          {/* Pundi Merah Expenses Card */}
+          <div className="bg-gradient-to-r from-red-400 to-red-500 p-4 rounded-lg shadow-md text-white">
             <div className="flex justify-between items-start">
               <div>
-                <p className="text-orange-100">Operasional</p>
+                <p className="text-red-100">Pengeluaran Pundi Merah</p>
                 <h3 className="text-lg font-bold mt-1">
-                  {formatCurrency(operationalExpenses.reduce((a, b) => a + b, 0))}
+                  {formatCurrency(pundiMerahExpenses.reduce((a, b) => a + b, 0))}
                 </h3>
               </div>
-              <div className="p-2 bg-orange-400 bg-opacity-30 rounded-full">
+              <div className="p-2 bg-red-400 bg-opacity-30 rounded-full">
                 <FaReceipt className="text-sm" />
               </div>
             </div>
           </div>
           
-          {/* Program Expenses Card */}
-          <div className="bg-gradient-to-r from-indigo-400 to-indigo-500 p-4 rounded-lg shadow-md text-white">
+          {/* Pundi Hijau Expenses Card */}
+          <div className="bg-gradient-to-r from-green-400 to-green-500 p-4 rounded-lg shadow-md text-white">
             <div className="flex justify-between items-start">
               <div>
-                <p className="text-indigo-100">Program/Kegiatan</p>
+                <p className="text-green-100">Pengeluaran Pundi Hijau</p>
                 <h3 className="text-lg font-bold mt-1">
-                  {formatCurrency(programExpenses.reduce((a, b) => a + b, 0))}
+                  {formatCurrency(pundiHijauExpenses.reduce((a, b) => a + b, 0))}
                 </h3>
               </div>
-              <div className="p-2 bg-indigo-400 bg-opacity-30 rounded-full">
+              <div className="p-2 bg-green-400 bg-opacity-30 rounded-full">
+                <FaReceipt className="text-sm" />
+              </div>
+            </div>
+          </div>
+          
+          {/* G-1000 Expenses Card */}
+          <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 p-4 rounded-lg shadow-md text-white">
+            <div className="flex justify-between items-start">
+              <div>
+                <p className="text-yellow-100">Pengeluaran G-1000</p>
+                <h3 className="text-lg font-bold mt-1">
+                  {formatCurrency(g1000Expenses.reduce((a, b) => a + b, 0))}
+                </h3>
+              </div>
+              <div className="p-2 bg-yellow-400 bg-opacity-30 rounded-full">
+                <FaReceipt className="text-sm" />
+              </div>
+            </div>
+          </div>
+          
+          {/* Rumah Tangga Expenses Card */}
+          <div className="bg-gradient-to-r from-purple-400 to-purple-500 p-4 rounded-lg shadow-md text-white">
+            <div className="flex justify-between items-start">
+              <div>
+                <p className="text-purple-100">Pengeluaran Rumah Tangga</p>
+                <h3 className="text-lg font-bold mt-1">
+                  {formatCurrency(rumahTanggaExpenses.reduce((a, b) => a + b, 0))}
+                </h3>
+              </div>
+              <div className="p-2 bg-purple-400 bg-opacity-30 rounded-full">
                 <FaReceipt className="text-sm" />
               </div>
             </div>
